@@ -38,6 +38,18 @@ export default {
         alert("최소 1개월에서 최대 24개월까지 계약 가능");
         this.month = 1;
       }
+
+      if (isNaN(a) == true) {
+        alert("숫자만 입력");
+        this.month = 1;
+      }
+    }
+  },
+  // hook. input 입력값이 바뀌었다면, 재렌더링 할 때(업데이트 되기 전에) 체크해서 비교
+  beforeUpdate() {
+    if (this.month == 2) {
+      alert("3개월 부터 계약 가능");
+      this.month = 3;
     }
   },
   props: {

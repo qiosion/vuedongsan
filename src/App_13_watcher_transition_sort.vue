@@ -3,20 +3,12 @@
     <a v-for="i in menu" :key="i">{{ i }}</a>
   </div>
 
-<!--
-    lifecycle Hook
-    컴포넌트의 라이프사이클 : 컴포넌트가 웹페이지에 표시되기까지 거치는 단계
-        1. create 단계 : 데이터만 존재
-        2. mount 단계 : template 에 있던 것을 실제 HTML 로 바뀜. 화면에 뜬 상태
-        3. 컴포넌트 생성
-        4. update 단계 : 데이터 변화 시 컴포넌트 실시간 재렌더링
-        5. unmount 단계 : 컴포넌트 삭제
-    
-    라이프사이클 중간에 훅 hook 을 걸어서 원하는 코드 실행 가능
-    서버에서 데이터 가져올 때도 lifecycle hook 안에 코드를 짬
--->
-  <Discount v-if="showDiscount == true" />
+  <Discount v-bind="Object" />
 
+<!--
+    vue 는 데이터 바인딩 해두면 HTML에 데이터가 실시간으로 반영됨
+    데이터를 정렬하고싶다면 그냥 sort() 함수 쓰면 됨
+-->
   <div style="text-align: right;">
     <button class="btn" @click="priceSort">가격순정렬</button>
     <button class="btn" @click="priceReverse">가격역정렬</button>
@@ -46,20 +38,28 @@ export default {
   name: "App",
   data() {
     return {
-      showDiscount: true,
       Object: {
         name: 'kim',
         age: 20,
       },
-      clicked: 0, 
-      isModalOpen: false,
+      clicked: 0, // 클릭한 제목
+      isModalOpen: false, // 1. UI 의 현재 상태를 데이터로 저장
       menu: ['Home', 'Products', 'About'],
-      onerooms: data,
+      onerooms: data, // [{}. {}. {}, ...]
       oneroomsOriginal: [...data], // 원본데이터 보존
       // array, object 데이터의 별개의 사본을 만드려면 [...array] 를 써야함
     };
   },
   methods: { // 함수
+    /*
+    sort() : 원본 데이터 변경시킴. 문자 정렬. 숫자 정렬 하고싶으면 아래 방식을 써야 함
+    reverse() : 역정렬
+
+    var array = [3, 6, 2];
+    array.sort(function(a, b) { // a, b 는 배열 안의 요소들
+      return a - b; // 둘 사이의 차이가 음수면 a 를 왼쪽으로 이동하는 방식(버블정렬)
+    })
+    */
     priceSort() { // 가격 순정렬
       this.onerooms.sort(function(a, b) {
         return a.price - b.price; // 가격 간 비교
@@ -68,6 +68,7 @@ export default {
     priceReverse() { // 가격 역정렬
       this.onerooms.reverse(function(a, b) {
         return a.price - b.price; // 가격 간 비교
+        // 또는 sort 함수 쓰되 b - a 하면 됨
       })
     },
     titleSort() { // 가나다 순정렬
@@ -76,6 +77,8 @@ export default {
       })
     },
     sortBack() { // 정렬 되돌리기
+      // 등호로 array 를 집어넣으면 서로간의 값 공유가 됨
+      // 그러므로 개별 복사본을 만들어서 집어넣어야함
       this.onerooms = [...this.oneroomsOriginal];
     }
   },
@@ -84,40 +87,27 @@ export default {
     Modal,
     Card,
   },
-  // lifecycle hook. 각 컴포넌트에 설정가능
-  created() { // html 생성 전 데이터만 존재할 때
-    // 서버에서 데이터 가져오는 코드는 created, mounted 에 작성
-  },
-  mounted() { // 마운트 되고 나서 실행
-    // this 쓸 때 화살표 함수 써야 에러가 안남
-    setTimeout(() => { // 지정 시간 후 실행
-      this.showDiscount = false;
-    }, 30000); // 30초
-
-    
-  },
-  beforeMount() { // 마운트 되기 전에 실행
-
-  },
 };
 </script>
 
 <style>
 /* 등장 */
 .fade-enter-from { /* 시작 */
-  transform: translateY(-1000px);
+  /* opacity: 0; */
+  transform: translateY(-1000px); /* y축 -1000px 으로 이동 */
 }
-.fade-enter-active { 
+.fade-enter-active { /* 중간단계. 트랜지션 등 */
   transition: all 1s;
 }
 .fade-enter-to { /* 끝 */
-  transform: translateY(0px);
+  /* opacity: 1; */
+  transform: translateY(0px); /* y축 0px 으로 이동. 즉 위에서 밑으로 내려오는 형태 */
 }
 /* 퇴장 */
 .fade-leave-from { /* 시작 */
   opacity: 1;
 }
-.fade-leave-active {
+.fade-leave-active { /* 중간단계. 트랜지션 등 */
   transition: all 1s;
 }
 .fade-leave-to { /* 끝 */
