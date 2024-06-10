@@ -6,26 +6,15 @@
   <Discount v-bind="Object" />
 
 <!--
-    css 로 애니메이션 주기
-        1. 애니메이션 시작 전 클래스 명과 애니메이션 끝난 후 클래스 명을 설정
-        2. 원할 때마다 클래스명을 붙이면 됨
-
-    isModalOpen 이 true일 때 end class 를 추가하고 싶다 -> 클래스에 데이터바인딩
-        :class="{ 붙이고싶은 클래스명: 조건식 }"
-        <div class="start" :class="{ end: isModalOpen }">
-    
-    vue 에서 제공하는 Transition 태그를 이용하면 쉬움
-        1. 애니메이션 주고싶은 요소를 <Transition name="변수명">으로 감싸기
-        2. 스타일에서 클래스명 3+3 개 작성
-            > 등장
-                변수명-enter-from : 시작 시 스타일
-                변수명-enter-active : 중간단계. 트랜지션 등을 작성
-                변수명-enter-to : 끝날 시 스타일
-            > 퇴장
-                변수명-leave-from : 시작 시 스타일
-                변수명-leave-active : 중간단계. 트랜지션 등을 작성
-                변수명-leave-to : 끝날 시 스타일
+    vue 는 데이터 바인딩 해두면 HTML에 데이터가 실시간으로 반영됨
+    데이터를 정렬하고싶다면 그냥 sort() 함수 쓰면 됨
 -->
+  <div style="text-align: right;">
+    <button class="btn" @click="priceSort">가격순정렬</button>
+    <button class="btn" @click="priceReverse">가격역정렬</button>
+    <button class="btn" @click="titleSort">가나다정렬</button>
+    <button class="btn" @click="sortBack">되돌리기</button>
+  </div>
 
   <Transition name="fade">
     <Modal :onerooms="onerooms" :clicked="clicked" :isModalOpen="isModalOpen"
@@ -56,11 +45,42 @@ export default {
       clicked: 0, // 클릭한 제목
       isModalOpen: false, // 1. UI 의 현재 상태를 데이터로 저장
       menu: ['Home', 'Products', 'About'],
-      onerooms: data,
+      onerooms: data, // [{}. {}. {}, ...]
+      oneroomsOriginal: [...data], // 원본데이터 보존
+      // array, object 데이터의 별개의 사본을 만드려면 [...array] 를 써야함
     };
   },
   methods: { // 함수
-    
+    /*
+    sort() : 원본 데이터 변경시킴. 문자 정렬. 숫자 정렬 하고싶으면 아래 방식을 써야 함
+    reverse() : 역정렬
+
+    var array = [3, 6, 2];
+    array.sort(function(a, b) { // a, b 는 배열 안의 요소들
+      return a - b; // 둘 사이의 차이가 음수면 a 를 왼쪽으로 이동하는 방식(버블정렬)
+    })
+    */
+    priceSort() { // 가격 순정렬
+      this.onerooms.sort(function(a, b) {
+        return a.price - b.price; // 가격 간 비교
+      })
+    },
+    priceReverse() { // 가격 역정렬
+      this.onerooms.reverse(function(a, b) {
+        return a.price - b.price; // 가격 간 비교
+        // 또는 sort 함수 쓰되 b - a 하면 됨
+      })
+    },
+    titleSort() { // 가나다 순정렬
+      this.onerooms.sort(function(a, b) {
+        return a.title.localeCompare(b.title);
+      })
+    },
+    sortBack() { // 정렬 되돌리기
+      // 등호로 array 를 집어넣으면 서로간의 값 공유가 됨
+      // 그러므로 개별 복사본을 만들어서 집어넣어야함
+      this.onerooms = [...this.oneroomsOriginal];
+    }
   },
   components: {
     Discount: Discount,
@@ -145,6 +165,15 @@ div {
 .menu a {
   color: white;
   padding: 10px;
+}
+
+.btn {
+  width: 95px;
+  margin: 5px;
+  border: 1px solid #ffadb8;
+  border-radius: 20px;
+  background-color: #f3ffad;
+  color: black;
 }
 
 #app {
