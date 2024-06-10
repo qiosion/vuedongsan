@@ -1,21 +1,9 @@
 <template>
-
-  <div v-if="1 == 1">
-    참일 때
-  </div>
-  <div v-else-if="1 == 2">
-    참이 아닐 때
-  </div>
-  <div v-else>
-    그 외
-  </div>
-
-  <div class="black-bg" v-if="isModalOpen == true">
+  <!-- 모달창 -> v-if="조건식" 사용. 참일 때만 html을 보여줌 -->
+  <div class="black-bg" v-if="isModalOpen">
     <div class="white-bg">
-      <h4>{{ onerooms[clicked].title }}</h4>
-      <img class="room-img" :src="onerooms[clicked].image">
-      <p>{{ onerooms[clicked].price }} 원</p>
-      <p>{{ onerooms[clicked].content }}</p>
+      <h4>상세 페이지</h4>
+      <p>상세 페이지 내용</p>
       <button @click="isModalOpen = false">닫기</button>
     </div>
   </div>
@@ -26,7 +14,8 @@
 
   <div v-for="(a, i) in onerooms" :key="i">
     <img class="room-img" :src="onerooms[i].image">
-    <h4 @click="isModalOpen = true; clicked = i;">{{ onerooms[i].title }}</h4>
+    <!-- 이미 v-if문을 통해 세팅 해뒀으니 isModalOpen 데이터 값을 true로 바꾸면 모달창이 열림 -->
+    <h4 @click="isModalOpen = true">{{ onerooms[i].title }}</h4>
     <p>{{ onerooms[i].price }} 원</p>
   </div>
 
@@ -42,7 +31,6 @@ export default {
   name: "App",
   data() {
     return {
-      clicked: 0, // 클릭한 제목
       isModalOpen: false, // 1. UI 의 현재 상태를 데이터로 저장
       menu: ['Home', 'Products', 'About'],
       onerooms: data,
