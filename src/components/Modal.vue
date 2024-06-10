@@ -5,7 +5,7 @@
       <img class="room-img" :src="onerooms[clicked].image">
       <p>{{ onerooms[clicked].price }} 원</p>
       <p>{{ onerooms[clicked].content }}</p>
-      <!-- <button @click="isModalOpen = false">닫기</button> -->
+      <button @click="closeFunction">닫기</button>
     </div>
   </div>
 </template>
@@ -18,6 +18,10 @@ export default {
     onerooms: Array,
     clicked: Number,
     isModalOpen: Boolean,
+  }, methods: {
+    closeFunction() {
+      this.$emit('closeModal', this.clicked)
+    }
   }
 }
 </script>

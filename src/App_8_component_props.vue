@@ -3,7 +3,25 @@
     <a v-for="i in menu" :key="i">{{ i }}</a>
   </div>
 
+<!-- 컴포넌트로 빼기 전
+  <div class="discount">
+    <h4>지금 결제 시 20% 할인</h4>
+  </div>
+
+  컴포넌트 쓰는 법
+    1. .vue 파일을 생성하여 코드 작성
+    2. script에서 vue 파일을 import
+    3. export 하는 곳의 components 에 등록
+  
+  컴포넌트 사용은 재사용하는 경우에만 사용하자! 무조건 빼지 말고.
+  데이터 바인딩 한 것은 컴포넌트로 빼면 못씀.
+  따라서 보통 데이터는 한곳(부모컴포넌트)에 집어넣어서 갖다씀(props)
+  자식에서만 쓰면 처음부터 데이터를 자식에 만들면 되는데, 아니면 최상위에 쓰고 props로 전송
+
+  Object 자료형만 v-bind 를 사용해서 한번에 보낼 수 있음
+-->
   <Discount v-bind="Object" />
+  <!-- <Discount :name="Object.name" :age="Object.age" /> -->
 
 <!-- 
   props 쓰는 법
@@ -13,20 +31,11 @@
     2. 자식 컴포넌트에서 default 값에 props 등록
         json 형태로 등록, {데이터 이름: 자료형 이름}
     
-  $emit() 함수
-    props 는 read-only. 자식 컴포넌트에서 수정하면 에러 발생.
-    이때 custom event 로 자식이 메시지 전송하여 해결
-      자식 -> 부모 메시지 전송 :$emit('변수명') 또는  $emit('변수명', 데이터)
-      부모가 메시지 수신 : @변수명="해당 변수명을 수신했을 때 실행할 js 코드"
-                        이때 js 코드 안에서 $event 를 사용하여 받은 데이터를 사용 가능
-    $emit() 을 함수 안에 쓰고싶다면 this.$emit()
--->
+  props 는 read-only. 자식 컴포넌트에서 수정하면 에러 발생
+ -->
+  <Modal :onerooms="onerooms" :clicked="clicked" :isModalOpen="isModalOpen" />
 
-  <Modal :onerooms="onerooms" :clicked="clicked" :isModalOpen="isModalOpen"
-  @closeModal="isModalOpen = false; clicked = $event"/>
-
-  <Card @openModal="isModalOpen = true; clicked = $event"
-  v-for="(oneroom, i) in onerooms"
+  <Card v-for="(oneroom, i) in onerooms"
   :key="i"
   :oneroom="onerooms[i]" />
 
