@@ -73,25 +73,25 @@ export default {
 <style>
 /* 등장 */
 .fade-enter-from { /* 시작 */
-  opacity: 0;
+  /* opacity: 0; */
+  transform: translateY(-1000px); /* y축 -1000px 으로 이동 */
 }
 .fade-enter-active { /* 중간단계. 트랜지션 등 */
   transition: all 1s;
 }
 .fade-enter-to { /* 끝 */
-  opacity: 1;
+  /* opacity: 1; */
+  transform: translateY(0px); /* y축 0px 으로 이동. 즉 위에서 밑으로 내려오는 형태 */
 }
 /* 퇴장 */
 .fade-leave-from { /* 시작 */
-  /* opacity: 1; */
-  transform: translateY(-1000px); /* y축으로 -1000px 이동해줘 */
+  opacity: 1;
 }
 .fade-leave-active { /* 중간단계. 트랜지션 등 */
   transition: all 1s;
 }
 .fade-leave-to { /* 끝 */
-  transform: translateY(0px); /* y축으로 -1000px 이동해줘 */
-  /* opacity: 0; */
+  opacity: 0;
 }
 
 .start {
